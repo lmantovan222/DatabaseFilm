@@ -65,3 +65,82 @@
  * - Gestisci il caso in cui la chiave API non è stata inserita e mostra un messaggio di errore
  * - Gestisci il caso in cui non ci sono risultati per la ricerca e mostra un messaggio "Nessun film trovato"
  */
+
+const API_KEY = "1f65ad73";
+const URL_BASE = "http://www.omdbapi.com/";
+let inputTesto = document.querySelector("#searchInput");
+let btnCerca = document.querySelector("#searchBtn");
+let sezioneRisultati = document.querySelector("#resultsSection");
+let tabella = document.querySelector("#moviesTable");
+let corpoTabella = document.querySelector("#moviesTableBody");
+let messaggio = document.querySelector("#message");
+let listaFilm = [];
+
+function handleError(message) {
+    tabella.innerHTML = '';
+
+    let div = document.createElement('div');
+    div.className = 'error';
+
+    let strong = document.createElement('strong');
+    strong.textContent = `❌ ${message}`;
+
+    div.appendChild(strong);
+    tabella.appendChild(div);
+    console.error('Errore:', message);
+}
+
+async function cercaFilm() {
+
+    let inputValore = inputTesto.value;
+
+    try {
+        let risposta = await fetch(`${URL_BASE}/?apikey=${API_KEY}&s=${inputValore}`);
+        let dati = await risposta.json();
+        listaFilm = dati.Search
+
+        creaTabellaFilm();
+
+    } catch (error) {
+        handleError("errore nella fetch!");
+    }
+}
+
+function creaTabellaFilm() {
+
+    sezioneRisultati.classList.remove("nascosto");
+    
+    corpoTabella.innerHTML = "";
+
+
+    for (let film of listaFilm) {
+
+        let rigaFilm = document.createElement("tr");
+
+        let cellaImmagine = document.createElement("td");
+        let immagine = document.createElement("img");
+        cellaImmagine.appendChild(immagine);
+        immagine.src = film.Poster;
+
+        let cellaNome = document.createElement("td");
+        cellaNome.textContent = film.Title;
+
+        let cellaAnno = document.createElement("td");
+        cellaAnno.textContent = film.Year;
+
+        let cellaTipo = document.createElement("td");
+        cellaTipo.textContent = film.Type;
+
+        // let cellaAzioni = document.createElement("button");
+
+        rigaFilm.appendChild(cellaImmagine);
+        rigaFilm.appendChild(cellaNome);
+        rigaFilm.appendChild(cellaAnno);
+        rigaFilm.appendChild(cellaTipo);
+    //    rigaFilm.appendChild(cellaAzioni);
+
+        corpoTabella.appendChild(rigaFilm);
+    }
+}
+
+btnCerca.addEventListener("click", cercaFilm);
