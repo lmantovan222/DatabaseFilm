@@ -109,7 +109,7 @@ async function cercaFilm() {
 function creaTabellaFilm() {
 
     sezioneRisultati.classList.remove("nascosto");
-    
+
     corpoTabella.innerHTML = "";
 
 
@@ -131,16 +131,33 @@ function creaTabellaFilm() {
         let cellaTipo = document.createElement("td");
         cellaTipo.textContent = film.Type;
 
-        // let cellaAzioni = document.createElement("button");
+        let cellaAzioni = document.createElement("td");
+        let btnAzioni = document.createElement("button");
+        btnAzioni.textContent = "Aggiungi ai preferiti";
+        btnAzioni.classList.add("search-btn");
+        cellaAzioni.appendChild(btnAzioni);
 
         rigaFilm.appendChild(cellaImmagine);
         rigaFilm.appendChild(cellaNome);
         rigaFilm.appendChild(cellaAnno);
         rigaFilm.appendChild(cellaTipo);
-    //    rigaFilm.appendChild(cellaAzioni);
+        rigaFilm.appendChild(cellaAzioni);
 
         corpoTabella.appendChild(rigaFilm);
     }
 }
 
 btnCerca.addEventListener("click", cercaFilm);
+
+function aggiungiPreferiti() {
+    let datiFilm = localStorage.getItem("listaFilmPreferiti");
+    let listaFilmPreferiti = datiFilm ? JSON.parse(datiFilm) : [];
+
+    btnAzioni.addEventListener("click", () => {
+        listaFilmPreferiti.push(datiFilm);
+        datiFilm = JSON.stringify(film);
+        localStorage.setItem("film", datiFilm);
+    })
+}
+
+
