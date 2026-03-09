@@ -52,9 +52,9 @@
  * 7. Disabilitare il pulsante se il film è già nei preferiti
  * 
  * Suggerimenti per l'implementazione:
- * - Usa fetch() per chiamare l'API con il termine di ricerca
- * - Usa data.Search per ottenere l'array di film
- * - Crea le righe della tabella dinamicamente con innerHTML o createElement
+ * OK- Usa fetch() per chiamare l'API con il termine di ricerca
+ * OK- Usa data.Search per ottenere l'array di film
+ * OK- Crea le righe della tabella dinamicamente con innerHTML o createElement
  * - Usa localStorage.setItem() e localStorage.getItem() per i preferiti
  * - Salva i preferiti come JSON: JSON.stringify() e JSON.parse()
  * - Salva almeno questi dati dei film (titolo, anno, imdbID, tipo, poster)
@@ -132,10 +132,15 @@ function creaTabellaFilm() {
         cellaTipo.textContent = film.Type;
 
         let cellaAzioni = document.createElement("td");
-        let btnAzioni = document.createElement("button");
-        btnAzioni.textContent = "Aggiungi ai preferiti";
-        btnAzioni.classList.add("search-btn");
-        cellaAzioni.appendChild(btnAzioni);
+        let btnPreferiti = document.createElement("button");
+        btnPreferiti.textContent = "Aggiungi ai preferiti";
+        btnPreferiti.classList.add("search-btn");
+        cellaAzioni.appendChild(btnPreferiti);
+        let btnRimuoviPreferiti = document.createElement("button");
+        btnRimuoviPreferiti.textContent = "Rimuovi dai preferiti";
+        btnRimuoviPreferiti.classList.add("search-btn");
+        cellaAzioni.appendChild(btnRimuoviPreferiti);
+
 
         rigaFilm.appendChild(cellaImmagine);
         rigaFilm.appendChild(cellaNome);
@@ -149,15 +154,25 @@ function creaTabellaFilm() {
 
 btnCerca.addEventListener("click", cercaFilm);
 
-function aggiungiPreferiti() {
-    let datiFilm = localStorage.getItem("listaFilmPreferiti");
-    let listaFilmPreferiti = datiFilm ? JSON.parse(datiFilm) : [];
 
-    btnAzioni.addEventListener("click", () => {
-        listaFilmPreferiti.push(datiFilm);
-        datiFilm = JSON.stringify(film);
-        localStorage.setItem("film", datiFilm);
-    })
+// * - Crea una funzione per salvare i preferiti (sono un array di oggetti ) che vengono selezionati dall'utente al click del pulsante "Aggiungi ai Preferiti" come JSON: JSON.stringify() e JSON.parse()
+// * - Salva almeno questi dati dei film (titolo, anno, imdbID, tipo, poster);
+// * - Controlla se un film non è già nei preferiti prima di aggiungerlo (controlla usando filter e l'imdbID per identificare univocamente);
+// * - Crea una funzione per rimuovere i preferiti al click del pulsante "Rimuovi dai Preferiti" (usa filter per rimuovere l'elemento dall'array dei preferiti e aggiorna localStorage);
+// * - Aggiungi event listener al pulsante "Aggiungi ai Preferiti" e al pulsante "Rimuovi dai Preferiti" ;
+
+const listaFilmPreferiti = "filmPreferiti";
+
+function caricaPreferiti() {
+    const stored = localStorage.getItem(listaFilmPreferiti);
+    return stored ? JSON.parse(stored) : [];
 }
+
+function salvaPreferiti(preferiti) {
+    localStorage.setItem(REPO, JSON.stringify(preferiti));
+}
+
+
+
 
 
