@@ -164,15 +164,25 @@ btnCerca.addEventListener("click", cercaFilm);
 const listaFilmPreferiti = "filmPreferiti";
 
 function caricaPreferiti() {
-    const stored = localStorage.getItem(listaFilmPreferiti);
-    return stored ? JSON.parse(stored) : [];
+    const salvati = localStorage.getItem(listaFilmPreferiti);
+    return salvati ? JSON.parse(salvati) : [];
 }
 
 function salvaPreferiti(preferiti) {
-    localStorage.setItem(REPO, JSON.stringify(preferiti));
+    localStorage.setItem(listaFilmPreferiti, JSON.stringify(preferiti));
+    if(film.imdbID=== imdbID){
+        return caricaPreferiti();
+    }
 }
 
 
+function rimuoviPreferiti(film){
+    caricaPreferiti(film);
+    localStorage.removeItem(film);
+}
 
+let btnPreferiti = document.querySelector("#");
+let btnRimuoviPreferiti = document.querySelector("#");
 
-
+btnPreferiti.addEventListener("click", salvaPreferiti);
+btnRimuoviPreferiti.addEventListener("click", rimuoviPreferiti);
